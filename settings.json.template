@@ -133,12 +133,12 @@
       "display_format": "LLL dd, yyyy HH:mm:ss ZZZZ",
       // timezone: All dates and times are stored as UTC dates and can either be displayed in UTC format or else they can be displayed in the local timezone according to a user's web browser settings
       //           valid options: utc or local
-      "timezone": "local",
+      "timezone": "utc",
       // enable_alt_timezone_tooltips: Determine if dates and times should have a mouse-over tooltip which displays an alternate timezone value
       //                               If set to true and the "shared_pages.date_time.timezone" setting is set to "utc" then enabling this option will display date/time tooltips in the local browser's timezone
       //                               If set to true and the "shared_pages.date_time.timezone" setting is set to "local" then enabling this option will display date/time tooltips in the UTC timezone
       //                               If set to false, no tooltips will be displayed for any date/time values
-      "enable_alt_timezone_tooltips": false
+      "enable_alt_timezone_tooltips": true
     },
     // table_header_bgcolor: Change the background color of all table headers
     //                       valid options: light, dark or leave blank ( "" ) for default colors
@@ -631,7 +631,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: NovaCoin Website
           "tooltip_text": "Website",
           // url: The exact url that the social link should navigate to
-          "url": "https://nova-coin.org",
+          "url": "https://site1.nova-coin.net",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "",
           // image_path: The path to an image file that will be displayed for this social link
@@ -716,7 +716,10 @@
       // reload_table_seconds: The time in seconds to automatically reload the table data from the server
       //                       Set to 0 to disable automatic reloading of table data
       "reload_table_seconds": 60
-    }
+    },
+    // show_extracted_by: Determine whether to show a new column with the address(es) that mined the block
+    //                    If enabled, a new column will be displayed on the index page that displays the address(es) that mined the block for the coinbase transaction only
+    "show_extracted_by": true
   },
 
   // block_page: a collection of settings that pertain to the block page
@@ -750,7 +753,10 @@
       // key_name: The name of the key or identifier in the raw block data that determines which hash algorithm was used to mine a particular block
       //           NOTE: Changing this option will require a full reindex of the blockchain data before previously synced blocks can display the algorithm
       "key_name": "pow_algo"
-    }
+    },
+    // show_extracted_by: Determine whether to show a new column with the address(es) that mined the block
+    //                    If enabled, a new column will be displayed on the block page that displays the address(es) that mined the block
+    "show_extracted_by": true
   },
 
   // transaction_page: a collection of settings that pertain to the transaction/tx page
@@ -776,7 +782,10 @@
     "genesis_tx": "4cb33b3b6a861dcbc685d3e614a9cafb945738d6833f182855679f2fad02057b",
     // show_op_return: Determine whether to decode and show OP_RETURN values that may have been embeddeded in a transaction
     //                 NOTE: Enabling this option will require a full reindex of the blockchain data before previously synced transactions can display the OP_RETURN value
-    "show_op_return": false
+    "show_op_return": true,
+    // show_extracted_by: Determine whether to show a new column with the address(es) that mined the block
+    //                    If enabled, a new column will be displayed on the transaction page that displays the address(es) that mined the block for the coinbase transaction only
+    "show_extracted_by": true
   },
 
   // address_page: a collection of settings that pertain to the address page
@@ -937,6 +946,9 @@
     // connections_table: a collection of settings that pertain to the connections table on the network page
     //                    Table data is populated via the /ext/getnetworkpeers api
     "connections_table": {
+      // enabled: Enable/disable the connections table (true/false)
+      //          If set to false, the connections table will be completely inaccessible
+      "enabled": true,
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
@@ -953,6 +965,9 @@
     // addnodes_table: a collection of settings that pertain to the add nodes table on the network page
     //                 Table data is populated via the /ext/getnetworkpeers api
     "addnodes_table": {
+      // enabled: Enable/disable the addnodes table (true/false)
+      //          If set to false, the addnodes table will be completely inaccessible
+      "enabled": true,
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
@@ -969,6 +984,9 @@
     // onetry_table: a collection of settings that pertain to the one try table on the network page
     //               Table data is populated via the /ext/getnetworkpeers api
     "onetry_table": {
+      // enabled: Enable/disable the onetry table (true/false)
+      //          If set to false, the onetry table will be completely inaccessible
+      "enabled": true,
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
@@ -1021,7 +1039,11 @@
       "show_distribution_chart": true,
       // colors: An array of html color codes to represent the top 100 groupings in the wealth distribution table and pie chart
       //         From left-to-right the 6 colors are represented as the following: "top 1-25", "top 26-50", "top 51-75", "top 76-100", "101+" and "burned coins" - which is used if the include_burned_coins_in_distribution setting is enabled
-      "colors": [ "#e73cbd", "#00bc8c", "#3498db", "#e3ce3e", "#adb5bd", "#e74c3c" ]
+      "colors": [ "#e73cbd", "#00bc8c", "#3498db", "#e3ce3e", "#adb5bd", "#e74c3c" ],
+      // show_address_count: Show/hide the total count of all unique addresses used in at least 1 transaction at the bottom of the wealth distribution table
+      //                     If set to true, the address count will be determined at the end of the richlist sync and displayed in the wealth distribution table
+      //                     If set to false, the richlist sync will finish faster because the address count will not be looked up and not displayed in the wealth distribution table
+      "show_address_count": true
     },
     // burned_coins: a collection of settings that pertain to the wallet addresses that should not appear in the richlist/top100 page
     //               NOTE: These settings won't take effect until after running (and completing) a normal index sync or reindex-rich
@@ -1075,7 +1097,7 @@
     "show_market_select": true,
     // exchanges: Enable/disable api integration with any of the available built-in exchanges
     //            Enabled exchanges display a number of exchange-related metrics including market summary, 24 hour chart, most recent buy/sell orders and latest trade history
-    //            Supported exchanges: altmarkets, dex-trade, freiexchange/freixlite, nonkyc, poloniex, xeggex, yobit
+    //            Supported exchanges: altmarkets, dex-trade, dexomy, freiexchange/freixlite, nonkyc, poloniex, xeggex, yobit
     "exchanges": {
       // altmarkets: a collection of settings that pertain to the altmarkets exchange
       "altmarkets": {
@@ -1098,6 +1120,17 @@
         //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
         //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
         "trading_pairs": [ "LTC/BTC" ]
+      },
+      // dexomy: a collection of settings that pertain to the dexomy exchange    
+      "dexomy": {
+        // enabled: Enable/disable the dexomy exchange (true/false)
+        //          If set to false, the dexomy page will be completely inaccessible and no market data will be downloaded for this exchange
+        "enabled": false,
+        // trading_pairs: An array of market trading pair symbols
+        //                You can add as many trading pairs as necessary
+        //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
+        //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
+        "trading_pairs": [ "BTC/USDT" ]
       },
       // freiexchange: a collection of settings that pertain to the freiexchange/freixlite exchange
       //               NOTE: freiexchange does not display a 24-hour chart due to a lack of OHLCV api data
@@ -1137,12 +1170,12 @@
       "xeggex": {
         // enabled: Enable/disable the xeggex exchange (true/false)
         //          If set to false, the xeggex page will be completely inaccessible and no market data will be downloaded for this exchange
-        "enabled": true,
+        "enabled": false,
         // trading_pairs: An array of market trading pair symbols
         //                You can add as many trading pairs as necessary
         //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
         //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
-        "trading_pairs": [ "NVC/BTC", "NVC/USDT", "NVC/DOGE" ]
+        "trading_pairs": [ "LTC/USDT" ]
       },
       // yobit: a collection of settings that pertain to the yobit exchange
       //        NOTE: yobit does not display a 24-hour chart due to a lack of OHLCV api data
@@ -1364,7 +1397,10 @@
           //          If set to false, the /ext/getlasttxs api will be completely disabled for public use (no definition on the api page and a disabled error msg if you try to call the endpoint directly) but the api will still be available internally to the explorer
           "enabled": true,
           // max_items_per_query: The maximum # of transactions that can be returned from the /ext/getlasttxs api endpoint in a single call
-          "max_items_per_query": 100
+          "max_items_per_query": 100,
+          // show_extracted_by: Determine whether to return a new field with the address(es) that mined the block
+          //                    If enabled, a new field will be added to the /ext/getlasttxs api endpoint that displays the address(es) that mined the block for the coinbase transaction only
+          "show_extracted_by": true
         },
         // getcurrentprice: a collection of settings that pertain to the /ext/getcurrentprice api endpoint
         //                  Returns last known exchange price
@@ -1530,7 +1566,12 @@
     //                              If set to true, bulk transactions to the database will wait for save confirmation which results in a slower save time but also returns information about which records failed to save
     //                              If set to false, bulk transactions to the database will not wait for save confirmation which results in a faster save time but will not return any error message for records that failed to save
     //                              NOTE: If you want to sync data as fast as possible and are sure that your blockchain doesn't contain any problematic or unsupported data types then you can set this value to "false" to maximize the speed of the block sync
-    "wait_for_bulk_database_save": true
+    "wait_for_bulk_database_save": true,
+    // rate_limit: a collection of settings that pertain to the amount of time to wait between requests
+    "rate_limit": {
+      // peer_sync_rate_limit: The amount of time to wait (in milliseconds) between geolocation api requests when syncing peer data
+      "peer_sync_rate_limit": 2000
+    }
   },
 
   // captcha: a collection of settings that pertain to the captcha security used by different elements of the explorer

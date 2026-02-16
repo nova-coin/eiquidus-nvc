@@ -105,9 +105,10 @@ Table of Contents
   - **Movement:** Displays latest blockchain transactions that are greater than a certain configurable amount
   - **Network:** Displays a list of peers that have connected to the coind wallet in the past 24 hours, along with useful addnode data that can be used to connect your own wallets to the network easier
   - **Top 100:** Displays the top 100 richest wallet addresses, the top 100 wallet addresses that have the highest total number of coins received based on adding up all received transactions, as well as a table and pie chart breakdown of wealth distribution. Additional support for omitting burned coins from top 100 lists
-  - **Markets:** Displays a number of exchange-related metrics including market summary, 24 hour chart, most recent buy/sell orders and latest trade history. Has the ability to integrate directly with exchange apis and/or the coingecko api from [https://www.coingecko.com/en/api](https://www.coingecko.com/en/api) to retrieve current market prices and convert to USD. The following 7 cryptocurrency exchanges are supported:
+  - **Markets:** Displays a number of exchange-related metrics including market summary, 24 hour chart, most recent buy/sell orders and latest trade history. Has the ability to integrate directly with exchange apis and/or the coingecko api from [https://www.coingecko.com/en/api](https://www.coingecko.com/en/api) to retrieve current market prices and convert to USD. The following 8 cryptocurrency exchanges are supported:
     - [AltMarkets](https://altmarkets.io)
     - [Dex-Trade](https://dex-trade.com)
+    - [Dexomy](https://dexomy.com)
     - [FreiExchange](https://freiexchange.com)/[FreiXLite](https://freixlite.com) *\*no chart support due to a lack of OHLCV api data*
     - [NonKyc](https://nonkyc.io)
     - [Poloniex](https://poloniex.com)
@@ -141,8 +142,8 @@ Table of Contents
       - **getmasternoderewardstotal:** Returns the total number of coins earned in masternode rewards for a specific address that arrived after a specific block height *\*only applicable to masternode coins*
   - **Claim Address:** Allows anyone to set custom display names for wallet addresses that they own using the **Sign Message** feature from their local wallet. Includes *bad word* filter support.
   - **Orphaned Blocks:** Displays a list of orphaned blocks with links to the next and previous "good" blocks
-  - **Block Info:** Displays block summary and list of transactions for a specific block height along with optional hash algorithm for multi-algo coins
-  - **Transaction Info:** Displays transaction summary, optional OP_RETURN value, list of input addresses and output addresses for a specific transaction
+  - **Block Info:** Displays block summary and list of transactions for a specific block height along with optional hash algorithm for multi-algo coins and optional list of wallet addresses that extracted/mined the block
+  - **Transaction Info:** Displays transaction summary, optional OP_RETURN value, optional list of wallet addresses that extracted/mined the coinbase transaction, list of input addresses and output addresses for a specific transaction
   - **Address Info:** Displays wallet address summary (balance, total sent, total received, QR code) and a list of latest transactions for a specific wallet address
 - Choose from 26 built-in themes with tweakable settings such as light and dark options to customize the look and feel of the explorer:
   - **Exor** *\*default theme made especially for eIquidus*
@@ -866,33 +867,51 @@ cd /path/to/explorer && /path/to/node ./scripts/update_explorer.js "dependencies
 
 #### Backup Database Script
 
-Make a complete backup of an eIquidus mongo database and save to compressed file. A built-in locking mechanism prevents data from being updated or changed while a backup is in process. Backups can be safely created while the explorer is actively running and/or while the explorer is turned off. The following backup scenarios are supported:
+Make a complete backup of an eIquidus mongo database or single collection and save to compressed file. A built-in locking mechanism prevents data from being updated or changed while a backup is in process. Backups can be safely created while the explorer is actively running and/or while the explorer is turned off.
+
+Parameters:
+1. Backup path or filename (optional)
+2. Collection name (optional) **NOTE:** This parameter is useful for backing up a single database collection such as the `claimaddresses` or plugin-related collections that can later be restored into an existing database without affecting any other database collections.
+
+The following backup scenarios are supported:
 
 **Backup Database (No filename specified)**
 
-`npm run create-backup`: Backs up to the explorer/backups directory by default with the current date as the filename in the format  yyyy-MMM-dd.bak
+`npm run create-backup`: Backs up to the explorer/backups directory by default with the current date as the filename in the format yyyy-MMM-dd.bak
 
 **Backup Database (Partial filename specified)**
 
-`npm run create-backup test`: Backs up the the explorer/backups directory by default with the filename test.bak
+`npm run create-backup test`: Backs up the explorer/backups directory by default with the filename test.bak
 
 **Backup Database (Full filename specified)**
 
-`npm run create-backup today.bak`: Backs up the the explorer/backups directory by default with the filename today.bak
+`npm run create-backup today.bak`: Backs up the explorer/backups directory by default with the filename today.bak
 
 **Backup Database (Full path with partial filename specified)**
 
-`npm run create-backup /usr/local/bin/abc`: Backs up the the /usr/local/bin directory with the filename abc.bak
+`npm run create-backup /usr/local/bin/abc`: Backs up the /usr/local/bin directory with the filename abc.bak
 
 **Backup Database (Full path and filename specified)**
 
-`npm run create-backup ~/new.bak`: Backs up the the users home directory with the filename new.bak
+`npm run create-backup ~/new.bak`: Backs up the users home directory with the filename new.bak
+
+**Backup Database (Filename and collection both specified)**
+
+`npm run create-backup test claimaddresses`: Backs up only the `claimaddresses` collection to the explorer/backups directory by default with the filename test.bak
+
+**Backup Database (No filename specified, and backup a single collection only)**
+
+`npm run create-backup "" masternodes`: Backs up only the `masternodes` collection to the explorer/backups directory by default with the current date as the filename in the format yyyy-MMM-dd.bak 
 
 #### Restore Database Script
 
-Restore a previously saved eIquidus mongo database backup. :warning: **WARNING:** This will completely overwrite your existing eIquidus mongo database, so be sure to make a full backup before proceeding. A built-in locking mechanism prevents data from being updated or changed while a backup is being restored. Backups can be safely restored while the explorer is actively running and/or while the explorer is turned off.
+Restore a previously saved eIquidus mongo database backup. :warning: **WARNING:** Unless a single collection name is specified, this will completely overwrite your existing eIquidus mongo database, so be sure to make a full backup before proceeding. A built-in locking mechanism prevents data from being updated or changed while a backup is being restored. Backups can be safely restored while the explorer is actively running and/or while the explorer is turned off.
 
 **NOTE:** Older v1.x eIquidus database backups were compressed into tar.gz files. These older tar.gz backups can still be restored, but you must specifically add the .tar.gz suffix. Example: `npm run restore-backup /path/to/old_backup.tar.gz`
+
+Parameters:
+1. Backup path or filename (optional)
+2. Collection name (optional) **NOTE:** This parameter is useful for restoring a single database collection such as the `claimaddresses` or plugin-related collections without affecting any other database collections. This option can be used with a single collection backup or full database backup and will restore only the specified collection.
 
 The following restore scenarios are supported:
 
@@ -911,6 +930,10 @@ The following restore scenarios are supported:
 **Restore Database (Full path and filename specified)**
 
 `npm run restore-backup ~/archive.bak`: Restores the ~/archive.bak file
+
+**Restore Database (Filename and collection both specified)**
+
+`npm run restore-backup test claimaddresses`: Restores only the `claimaddresses` collection from the explorer/scripts/backups/test.bak file
 
 #### Delete Database Script
 
@@ -948,10 +971,14 @@ The eIquidus block explorer is brought to you by the tireless efforts of the [Ex
 
 You can support us via one of the following options:
 
-1. [Buy and hodl EXOR](https://freixlite.com/market/EXOR/LTC). Buying and trading our EXOR coin helps stimulate the market price which allows us to hire more developers and continue to release high quality products in the future.
+1. Buy and hodl EXOR. Buying and trading our EXOR coin helps stimulate the market price which allows us to hire more developers and continue to release high quality products in the future. We are listed on the following exchanges:
+    - [FreiXLite](https://freixlite.com/market/EXOR/LTC)
+    - [Dexomy](https://dexomy.com/exchange/dashboard?coin_pair=EXOR_USDT)
 2. Participate in our [crowdfunding program](https://exor.io/tasklist/hide-completed/hide-funded/show-unfunded/) by either sending some cryptocurrency to help fund the tasks you are most eager to see brought to life or [submit a new custom task request](https://exor.io/add-new-task/) detailing a feature or improvement you would like to see developed for any Exor-related project.
 3. Consider a small donation by sending us some cryptocurrency:
     - **BTC:** [15zQAQFB9KR35nPWEJEKvmytUF6fg2zvdP](https://www.blockchain.com/btc/address/15zQAQFB9KR35nPWEJEKvmytUF6fg2zvdP)
+    - **ETH:** [0x1E4163EE9721bCA934D9e40C792360A901a59E02](https://etherscan.io/address/0x1E4163EE9721bCA934D9e40C792360A901a59E02) **NOTE:** Can be used for USDT or any other token on the ETH network
+    - **BNB:** [0x1E4163EE9721bCA934D9e40C792360A901a59E02](https://bscscan.com/address/0x1E4163EE9721bCA934D9e40C792360A901a59E02) **NOTE:** Can be used for USDT or any other token on the BNB network
     - **EXOR:** [EYYW8Nvz5aJz33M3JNHXG2FEHWUsntozrd](https://explorer.exor.io/address/EYYW8Nvz5aJz33M3JNHXG2FEHWUsntozrd)
 4. Are you a software developer? Consider taking advantage of our [crowdfunding program](https://exor.io/tasklist/hide-completed/) and get paid in EXOR to help make the block explorer and other Exor-related projects even better by submitting code improvements for open bounty tasks.
 
