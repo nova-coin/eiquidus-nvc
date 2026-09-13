@@ -334,7 +334,7 @@
         //             The optimum logo size is 48x48 as the image will be forced to this size when displayed
         "image_path": "/img/page-title-img.png",
         // enable_animation: Enable/disable the flip/spin animation on the page title image (true/false)
-        "enable_animation": true
+        "enable_animation": false
       },
       // network_charts: A collection of settings that pertain to the network hashrate and difficulty line charts displayed on page header of all pages
       //                 NOTE: You can independently show/hide individual charts by changing the show_nethash_chart and show_difficulty_chart values in the settings for each page
@@ -587,9 +587,9 @@
           //          If set to false, the link will be completely inaccessible
           "enabled": true,
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: NovaCoin Twitter
-          "tooltip_text": "Twitter",
+          "tooltip_text": "Twitter/x",
           // url: The exact url that the social link should navigate to
-          "url": "https://twitter.com/Novacoin_NVC",
+          "url": "https://x.com/Novacoin_NVC",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "fa-brands fa-twitter",
           // image_path: The path to an image file that will be displayed for this social link
@@ -631,7 +631,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: NovaCoin Website
           "tooltip_text": "Website",
           // url: The exact url that the social link should navigate to
-          "url": "https://site1.nova-coin.net",
+          "url": "https://nova-coin.org",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "",
           // image_path: The path to an image file that will be displayed for this social link
@@ -641,7 +641,7 @@
         {
           // enabled: Enable/disable this particular social link (true/false)
           //          If set to false, the link will be completely inaccessible
-          "enabled": true,
+          "enabled": false,
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: NovaCoin Coingecko
           "tooltip_text": "Coingecko",
           // url: The exact url that the social link should navigate to
@@ -1625,12 +1625,12 @@
   "labels": {
     // A collection of settings that pertain to the 4SWAPxopn67fmorSVcJEjhxUJ7yNgAD3Sz wallet address
     // NOTE: Change this value to the wallet address that you would like to set a custom label on
-    "4SWAPxopn67fmorSVcJEjhxUJ7yNgAD3Sz": {
+    "9EuEfZLL5tnagtMgFHtaEv2dGtZnE7cAZU": {
       // enabled: Enable/disable this particular wallet address label (true/false)
       //          If set to false, the label will be completely hidden
       "enabled": true,
       // label: The text to display in the custom label
-      "label": "Swap to BSC Address",
+      "label": "wNVC Proof-of-Funds MultiSig",
       // type: The bootstrap CSS class suffix for the label. This will change the background color of the label.
       //       Valid options: primary, secondary, success, danger, warning, info, light, dark
       //       NOTE: Leave the value blank ( "" ) to use default colors
